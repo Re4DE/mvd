@@ -1,0 +1,81 @@
+#
+#  Copyright (c) 2025 Fraunhofer Institute for Energy Economics and Energy System Technology (IEE)
+#
+#  This program and the accompanying materials are made available under the
+#  terms of the Apache License, Version 2.0 which is available at
+#  https://www.apache.org/licenses/LICENSE-2.0
+#
+#  SPDX-License-Identifier: Apache-2.0
+#
+#  Contributors:
+#       Fraunhofer IEE - initial API and implementation
+#
+#
+
+name: re4de-central-services-oauth2
+
+volumes:
+  postgres_data:
+  mongo_data:
+
+services:
+  # Keycloak + Database
+  keycloak:
+    image: keycloak/keycloak:26.5.4
+    ports:
+      - "8080:8080"
+    command: start-dev
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: devpass
+      KC_DB: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: devpass
+      KC_DB_URL: jdbc:postgresql://postgresql:5432/keycloak
+
+  postgresql:
+    image: postgres:18.2-alpine3.23
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: devpass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - "postgres_data:/var/lib/postgresql/18/docker"
+
+  # Connector Registry + Database
+  connector-registry:
+    image: ghcr.io/re4de/connector-registry:1.0.0-edc0.14.0
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_HOST: mongodb
+    depends_on:
+      mongodb:
+        condition: service_healthy
+        restart: true
+
+  mongodb:
+    image: mongo:8.2.5-noble
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: devpass
+      MONGO_INITDB_DATABASE: registry
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.runCommand({serverStatus:1}).ok' | mongosh admin -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} | grep 1"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - mongo_data:/data/db
+      - ./config/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro

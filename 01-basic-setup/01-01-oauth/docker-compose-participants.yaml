@@ -1,0 +1,66 @@
+#
+#  Copyright (c) 2025 Fraunhofer Institute for Energy Economics and Energy System Technology (IEE)
+#
+#  This program and the accompanying materials are made available under the
+#  terms of the Apache License, Version 2.0 which is available at
+#  https://www.apache.org/licenses/LICENSE-2.0
+#
+#  SPDX-License-Identifier: Apache-2.0
+#
+#  Contributors:
+#       Fraunhofer IEE - initial API and implementation
+#
+#
+
+name: re4de-participants-oauth2
+
+volumes:
+  postgres_data:
+  vault_data:
+
+services:
+  # Participant one Alice
+
+
+
+  # Participant two Bob
+
+
+
+  # Shared Database and Vault
+  postgresql:
+    image: postgres:18.2-alpine3.23
+    environment:
+      POSTGRES_DB: edc
+      POSTGRES_USER: edc
+      POSTGRES_PASSWORD: devpass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - "postgres_data:/var/lib/postgresql/18/docker"
+
+  vault:
+    image: hashicorp/vault:1.21.4
+    command: [ "vault", "server", "-config=/vault/config" ]
+    environment:
+      VAULT_API_ADDR: http://127.0.0.1:8200
+      VAULT_ADDR: http://127.0.0.1:8200
+      VAULT_DEV_ROOT_TOKEN_ID: devpass
+      VAULT_LOCAL_CONFIG: '{"storage": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
+      VAULT_SUPPLEMENTAL_CONFIG: '{"ui": false, "listener": [{"tcp": { "address": "0.0.0.0:8200", "tls_disable": true}}]}'
+    healthcheck:
+      test: ["CMD-SHELL", "vault", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - "./config/vault/vault-init.sh:/scripts/vault-init.sh"
+      - "./config/vault/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
+      - "vault_data:/vault"
