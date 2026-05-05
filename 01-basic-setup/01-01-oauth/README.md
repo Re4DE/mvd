@@ -16,7 +16,7 @@ The `Connector Registry` is a phonebook that holds a list of all available parti
 
 For this step-by-step description, you need the following software installed on your computer:
 
-- Container Engine, such as Docker
+- Container Engine, such as Docker or Podman
 - Terminal 
 - API Tool, such as cURL or Postman
 
@@ -25,6 +25,7 @@ For this step-by-step description, you need the following software installed on 
 Open a Terminal and execute the following commands:
 ```sh
 $ cd ./01-basic-setup/01-01-oauth
+$ docker network create dataspace-net
 $ docker compose -f docker-compose-central.yaml up -d
 ```
 With these commands you will start an instance of `Keycloak` and the `Connector Registry`.
@@ -33,7 +34,7 @@ Both are already pre-configured.
 ### 02. Check everything is up and running
 
 Check the status of the containers in Docker Desktop or with the `docker ps` command.
-Check the logs for any Errors. If you are not able to resolve the issue, feel free to open an `Issue`!
+Check the logs for any Errors.
 
 ### 03. Onboard a participant
 
