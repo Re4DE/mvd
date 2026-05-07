@@ -16,9 +16,9 @@ The `Connector Registry` is a phonebook that holds a list of all available parti
 
 For this step-by-step description, you need the following software installed on your computer:
 
-- Container Engine, such as Docker or Podman
+- Container Engine, such as `Docker` or `Podman`
 - Terminal 
-- API Tool, such as cURL or Postman
+- API Tool, such as `cURL` or `Postman`
 
 ### 01. Start central services
 
@@ -33,11 +33,20 @@ Both are already pre-configured.
 
 ### 02. Check everything is up and running
 
-Check the status of the containers in Docker Desktop or with the `docker ps` command.
-Check the logs for any Errors.
+Check the status of the containers in `Docker Desktop` or with the `docker ps` command.
+Check the logs for any errors.
 
-### 03. Onboard a participant
+### 03. Start the participants
+
+Back to your terminal, run the following commands:
+```sh
+$ docker compose -f docker-compose-participants.yaml up -d
+```
+With this command, you start two participants with dedicated `Control` and `Data Planes` but a shared `PostgreSQL` and `HashiCorp Vault` instance.
+You are now ready to go through our [Feature Showcase](../../02-features/README.md).
+
+### 04. Onboard a participant technically (optional)
 
 
 
-### 04. Offboard a participant
+### 05. Offboard a participant technically (optional)

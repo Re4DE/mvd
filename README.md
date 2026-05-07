@@ -1,6 +1,6 @@
 # MVD
 
-[![license](https://img.shields.io/github/license/eclipse-edc/Connector?style=flat-square&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
+[![license](https://img.shields.io/github/license/Re4DE/mvd?style=flat-square&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
 
@@ -22,8 +22,8 @@ You should use `OAuth2` and `X.509` only for demonstration or fast bootstrap.
 
 ## 02. Feature Showcases
 
-After you have chosen and deployed one of our three basic setups, you can explore the following Feature Showcases of `Re4DE`:
-- [Connector UI with decentralized catalog](02-features/02-01-catalog/README.md)
+After you have chosen and deployed one of our three basic setups, you can explore the following [Feature Showcases](02-features/README.md) of `Re4DE`:
+- [Decentralized Catalog](02-features/02-01-catalog/README.md)
 - [Integration Permission Administrator](02-features/02-01-pa/README.md)
 - [Integration Smart-Meter PKI](02-features/02-01-sm-pki/README.md)
 

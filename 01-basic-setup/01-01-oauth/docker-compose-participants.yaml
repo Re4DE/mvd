@@ -18,21 +18,192 @@ volumes:
   postgres_data:
   vault_data:
 
+networks:
+  dataspace-net:
+    external: true
+    name: dataspace-net
+
 services:
-  # Participant one Alice
+  # Participant one - Alice
+  controlplane-alice:
+    image: ghcr.io/re4de/connector-controlplane-oauth2:1.1.3-edc0.14.0
+    ports:
+      - "18181:8181"
+      - "18282:8282"
+      - "17171:17171"
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+      vault:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: alice
+      EDC_COMPONENT_ID: alice-controlplane
+      EDC_HOSTNAME: controlplane-alice
+      EDC_OAUTH_CLIENT_ID: alice
+      EDC_OAUTH_TOKEN_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/token
+      EDC_OAUTH_PROVIDER_JWKS_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/certs
+      EDC_OAUTH_PROVIDER_AUDIENCE: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/token
+      EDC_OAUTH_CERTIFICATE_ALIAS: auth-cert-alice
+      EDC_OAUTH_PRIVATE_KEY_ALIAS: auth-key-alice
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      EDC_POLICY_MONITOR_STATE-MACHINE_ITERATION-WAIT-MILLIS: 30000
+      WEB_HTTP_PORT: 8180
+      WEB_HTTP_MANAGEMENT_AUTH_TYPE: tokenbased
+      WEB_HTTP_MANAGEMENT_AUTH_KEY: devpass
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_alice
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_alice
+      EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry
+      EDC_CATALOG_REGISTRY_API_KEY: devpass
+      EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 30000
+      EDC_CATALOG_CACHE_EXECUTION_DELAY_SECONDS: 5
+      EDC_CATALOG_CACHE_PARTITION_NUM_CRAWLERS: 5
+      EDC_REGISTRATION_PARTICIPANT_CONTEXT_ENABLED: false
+      EDC_REGISTRATION_MEMBERSHIP_ISSUANCE_ENABLED: false
+      EDC_REGISTRATION_REGISTRY_URL: http://connector-registry:3000/api/registry
+      EDC_REGISTRATION_REGISTRY_API_KEY: devpass
+      EDC_REGISTRATION_IH_IDENTITY_URL: not-used
+      EDC_REGISTRATION_IH_CREDENTIALS_URL: not-used
+      EDC_REGISTRATION_ISSUER_DID: not-used
+      EDC_POLICY_PM_URL: https://api-nprd.traxes.io/prprd/forwatt/v2
+      EDC_POLICY_PM_TOKEN_URL: https://acc.signin.energy/am/oauth2/realms/root/realms/difesp/access_token
+      EDC_POLICY_PM_TOKEN_CLIENT-ID: change-me
+      EDC_POLICY_PM_TOKEN_CLIENT-SECRET-ALIAS: pm-secret
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
+  dataplane-alice:
+    image: ghcr.io/re4de/connector-dataplane:1.1.3-edc0.14.0
+    ports:
+      - "18185:8185"
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      controlplane-alice:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: alice
+      EDC_COMPONENT_ID: alice-dataplane
+      EDC_HOSTNAME: dataplane-alice
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      WEB_HTTP_PORT: 8180
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_alice
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_alice
+      EDC_DPF_SELECTOR_URL: http://controlplane-alice:9191/api/control/v1/dataplanes
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:8185/api/public
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-alice
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-alice
 
+  # Participant two - Bob
+  controlplane-bob:
+    image: ghcr.io/re4de/connector-controlplane-oauth2:1.1.3-edc0.14.0
+    ports:
+      - "28181:8181"
+      - "28282:8282"
+      - "27171:17171"
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+      vault:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: bob
+      EDC_COMPONENT_ID: bob-controlplane
+      EDC_HOSTNAME: controlplane-bob
+      EDC_OAUTH_CLIENT_ID: bob
+      EDC_OAUTH_TOKEN_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/token
+      EDC_OAUTH_PROVIDER_JWKS_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/certs
+      EDC_OAUTH_PROVIDER_AUDIENCE: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/token
+      EDC_OAUTH_CERTIFICATE_ALIAS: auth-cert-bob
+      EDC_OAUTH_PRIVATE_KEY_ALIAS: auth-key-bob
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      EDC_POLICY_MONITOR_STATE-MACHINE_ITERATION-WAIT-MILLIS: 30000
+      WEB_HTTP_PORT: 8180
+      WEB_HTTP_MANAGEMENT_AUTH_TYPE: tokenbased
+      WEB_HTTP_MANAGEMENT_AUTH_KEY: devpass
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_bob
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_bob
+      EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry
+      EDC_CATALOG_REGISTRY_API_KEY: devpass
+      EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 30000
+      EDC_CATALOG_CACHE_EXECUTION_DELAY_SECONDS: 5
+      EDC_CATALOG_CACHE_PARTITION_NUM_CRAWLERS: 5
+      EDC_REGISTRATION_PARTICIPANT_CONTEXT_ENABLED: false
+      EDC_REGISTRATION_MEMBERSHIP_ISSUANCE_ENABLED: false
+      EDC_REGISTRATION_REGISTRY_URL: http://connector-registry:3000/api/registry
+      EDC_REGISTRATION_REGISTRY_API_KEY: devpass
+      EDC_REGISTRATION_IH_IDENTITY_URL: not-used
+      EDC_REGISTRATION_IH_CREDENTIALS_URL: not-used
+      EDC_REGISTRATION_ISSUER_DID: not-used
+      EDC_POLICY_PM_URL: https://api-nprd.traxes.io/prprd/forwatt/v2
+      EDC_POLICY_PM_TOKEN_URL: https://acc.signin.energy/am/oauth2/realms/root/realms/difesp/access_token
+      EDC_POLICY_PM_TOKEN_CLIENT-ID: change-me
+      EDC_POLICY_PM_TOKEN_CLIENT-SECRET-ALIAS: pm-secret
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
-  # Participant two Bob
-
-
+  dataplane-bob:
+    image: ghcr.io/re4de/connector-dataplane:1.1.3-edc0.14.0
+    ports:
+      - "28185:8185"
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      controlplane-bob:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: bob
+      EDC_COMPONENT_ID: bob-dataplane
+      EDC_HOSTNAME: dataplane-bob
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      WEB_HTTP_PORT: 8180
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_bob
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_bob
+      EDC_DPF_SELECTOR_URL: http://controlplane-bob:9191/api/control/v1/dataplanes
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:8185/api/public
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-bob
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-bob
 
   # Shared Database and Vault
   postgresql:
     image: postgres:18.2-alpine3.23
+    networks:
+      - default
     environment:
-      POSTGRES_DB: edc
-      POSTGRES_USER: edc
       POSTGRES_PASSWORD: devpass
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
@@ -42,10 +213,13 @@ services:
       start_period: 30s
     volumes:
       - "postgres_data:/var/lib/postgresql/18/docker"
+      - "./config/postgres/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql"
 
   vault:
     image: hashicorp/vault:1.21.4
     command: [ "vault", "server", "-config=/vault/config" ]
+    networks:
+      - default
     environment:
       VAULT_API_ADDR: http://127.0.0.1:8200
       VAULT_ADDR: http://127.0.0.1:8200
@@ -53,7 +227,7 @@ services:
       VAULT_LOCAL_CONFIG: '{"storage": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
       VAULT_SUPPLEMENTAL_CONFIG: '{"ui": false, "listener": [{"tcp": { "address": "0.0.0.0:8200", "tls_disable": true}}]}'
     healthcheck:
-      test: ["CMD-SHELL", "vault", "status"]
+      test: ["CMD", "wget", "--spider", "--proxy", "off", "http://127.0.0.1:8200/v1/sys/health?standbyok=true"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -63,4 +237,5 @@ services:
     volumes:
       - "./config/vault/vault-init.sh:/scripts/vault-init.sh"
       - "./config/vault/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
+      - "./config/vault/secrets:/opt/secrets"
       - "vault_data:/vault"

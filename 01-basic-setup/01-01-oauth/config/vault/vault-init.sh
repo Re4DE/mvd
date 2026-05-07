@@ -25,5 +25,11 @@ put_if_missing() {
   fi
 }
 
-put_if_missing secret/signer-key "$SIGNER_KEY"
-put_if_missing secret/verifier-key "$VERIFIER_KEY"
+put_if_missing secret/auth-cert-alice "@/opt/secrets/alice/auth-cert-alice.pem"
+put_if_missing secret/auth-key-alice "@/opt/secrets/alice/auth-key-alice.pem"
+put_if_missing secret/auth-cert-bob "@/opt/secrets/bob/auth-cert-bob.pem"
+put_if_missing secret/auth-key-bob "@/opt/secrets/bob/auth-key-bob.pem"
+put_if_missing secret/signer-key-alice "@/opt/secrets/alice/signer-key-alice.pem"
+put_if_missing secret/verifier-key-alice "@/opt/secrets/alice/verifier-key-alice.pem"
+put_if_missing secret/signer-key-bob "@/opt/secrets/bob/signer-key-bob.pem"
+put_if_missing secret/verifier-key-bob "@/opt/secrets/bob/verifier-key-bob.pem"
