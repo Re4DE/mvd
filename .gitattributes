@@ -1,0 +1,5 @@
+# All files are checked into the repo with LF
+* text=auto
+
+# Make sure that linux shell scripts are encoded with LF
+*.sh eol=lf
