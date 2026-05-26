@@ -125,8 +125,15 @@ put_if_missing secret/verifier-key-my_con "@/opt/secrets/my_con/verifier-key-my_
 
 As you may have noticed, some files need to be created.
 For that, create a new folder in the `./config/secrets` folder with the `participantId` of your connector as the name, e.g., `my-con`.
-Now, create a file `signer-key-my_con.pem` and put the `private key` from the previously saved `my-con.jks` keystore. 
-Repeat the same for the `verifier-key-my_con.pem`, but this time with the `certificate`.
+Now, create a file `auth-key-my_con.pem` and put the `private key` from the previously saved `my-con.jks` keystore. 
+Repeat the same for the `auth-cert-my_con.pem`, but this time with the `certificate`.
+
+For the other two variables (e.g. `signer-key-my_con.pem` and `verifier-key-my_con.pem`), use the following commands in your secret folder to generate them:
+
+```bash
+$ openssl genrsa -out signer-key-my_con.pem 2048
+$ openssl rsa -in signer-key-my_con.pem -outform PEM -pubout -out verifier-key-my_con.pem
+```
 
 In the next step, we need to adjust the `docker-compose-participant.yaml` file. 
 Add the following configuration after the definition of participant `bob`.
