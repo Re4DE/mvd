@@ -114,25 +114,25 @@ GRANT ALL ON SCHEMA public TO edc_bob;
 GRANT ALL ON SCHEMA public TO edc_my_con;
 ```
 
-We will now go to the `vault-init.sh` script in the folder `./config/postgres`. Add the following lines to the end of the file:
+We will now go to the `vault-init.sh` script in the folder `./config/vault`. Add the following lines to the end of the file:
 
 ```bash
-put_if_missing secret/auth-cert-my_con "@/opt/secrets/my_con/auth-cert-my_con.pem"
-put_if_missing secret/auth-key-my_con "@/opt/secrets/my_con/auth-key-my_con.pem"
-put_if_missing secret/signer-key-my_con "@/opt/secrets/my_con/signer-key-my_con.pem"
-put_if_missing secret/verifier-key-my_con "@/opt/secrets/my_con/verifier-key-my_con.pem"
+put_if_missing secret/auth-cert-my-con "@/opt/secrets/my_con/auth-cert-my-con.pem"
+put_if_missing secret/auth-key-my-con "@/opt/secrets/my_con/auth-key-my-con.pem"
+put_if_missing secret/signer-key-my-con "@/opt/secrets/my_con/signer-key-my-con.pem"
+put_if_missing secret/verifier-key-my-con "@/opt/secrets/my_con/verifier-key-my-con.pem"
 ```
 
 As you may have noticed, some files need to be created.
-For that, create a new folder in the `./config/secrets` folder with the `participantId` of your connector as the name, e.g., `my-con`.
-Now, create a file `auth-key-my_con.pem` and put the `private key` from the previously saved `my-con.jks` keystore. 
-Repeat the same for the `auth-cert-my_con.pem`, but this time with the `certificate`.
+For that, create a new folder in the `./config/vault/secrets` folder with the `participantId` of your connector as the name, e.g., `my-con`.
+Now, create a file `auth-key-my-con.pem` and put the `private key` from the previously saved `my-con.jks` keystore. 
+Repeat the same for the `auth-cert-my-con.pem`, but this time with the `certificate`.
 
-For the other two variables (e.g. `signer-key-my_con.pem` and `verifier-key-my_con.pem`), use the following commands in your secret folder to generate them:
+For the other two variables (e.g. `signer-key-my-con.pem` and `verifier-key-my-con.pem`), use the following commands in your secret folder to generate them:
 
 ```bash
-$ openssl genrsa -out signer-key-my_con.pem 2048
-$ openssl rsa -in signer-key-my_con.pem -outform PEM -pubout -out verifier-key-my_con.pem
+$ openssl genrsa -out signer-key-my-con.pem 2048
+$ openssl rsa -in signer-key-my-con.pem -outform PEM -pubout -out verifier-key-my-con.pem
 ```
 
 In the next step, we need to adjust the `docker-compose-participant.yaml` file. 
@@ -164,7 +164,7 @@ You can interpret the following as a template to add further participants.
       EDC_OAUTH_TOKEN_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/token             # Do not change
       EDC_OAUTH_PROVIDER_JWKS_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/certs     # Do not change
       EDC_OAUTH_PROVIDER_AUDIENCE: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/token     # Do not change
-      EDC_OAUTH_CERTIFICATE_ALIAS: auth-cert-my-co                                      # Use participantId for unique name
+      EDC_OAUTH_CERTIFICATE_ALIAS: auth-cert-my-con                                     # Use participantId for unique name
       EDC_OAUTH_PRIVATE_KEY_ALIAS: auth-key-my-con                                      # Use participantId for unique name
       EDC_VAULT_HASHICORP_URL: http://vault:8200                                        # Do not change
       EDC_VAULT_HASHICORP_TOKEN: devpass                                                # Do not change
@@ -173,9 +173,9 @@ You can interpret the following as a template to add further participants.
       WEB_HTTP_MANAGEMENT_AUTH_TYPE: tokenbased                                         # Do not change
       WEB_HTTP_MANAGEMENT_AUTH_KEY: devpass                                             # Do not change
       EDC_SQL_SCHEMA_AUTOCREATE: true                                                   # Do not change
-      EDC_DATASOURCE_DEFAULT_USER: edc_my-con                                           # Need to equal to the user name you used in the init-db.sql script
-    EDC_DATASOURCE_DEFAULT_PASSWORD: devpass                                            # Need to equal to the user password you used in the init-db.sql script
-      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_my-con          # Depends on the two env vars you used above this
+      EDC_DATASOURCE_DEFAULT_USER: edc_my_con                                           # Need to equal to the user name you used in the init-db.sql script
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass                                          # Need to equal to the user password you used in the init-db.sql script
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_my_con          # Depends on the two env vars you used above this
       EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry             # Do not change
       EDC_CATALOG_REGISTRY_API_KEY: devpass                                             # Do not change
       EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 30000                                 # Do not change
@@ -218,13 +218,13 @@ You can interpret the following as a template to add further participants.
       EDC_VAULT_HASHICORP_TOKEN: devpass                                                # Do not change
       WEB_HTTP_PORT: 8180                                                               # Do not change
       EDC_SQL_SCHEMA_AUTOCREATE: true                                                   # Do not change
-      EDC_DATASOURCE_DEFAULT_USER: edc_my-con                                           # Need to equal to the user name you used in the init-db.sql script
+      EDC_DATASOURCE_DEFAULT_USER: edc_my_con                                           # Need to equal to the user name you used in the init-db.sql script
       EDC_DATASOURCE_DEFAULT_PASSWORD: devpass                                          # Need to equal to the user password you used in the init-db.sql script
-      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_my-con          # Depends on the two env vars you used above this
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_my_con          # Depends on the two env vars you used above this
       EDC_DPF_SELECTOR_URL: http://controlplane-my-con:9191/api/control/v1/dataplanes   # Hostname need to be equal with the service name of the control plane service, do not change port 
       EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:8185/api/public                # Do not change
-      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-bob                  # Same name as defined in vault-init.sh
-      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-bob               # Same name as defined in vault-init.sh
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-my-con               # Same name as defined in vault-init.sh
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-my-con            # Same name as defined in vault-init.sh
 ```
 
 Run the following command to apply the changes:
