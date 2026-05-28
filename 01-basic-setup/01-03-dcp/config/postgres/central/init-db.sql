@@ -55,5 +55,22 @@ VALUES ('did:web:identityhub-bob%3A10100:bob');
 INSERT INTO marketpartner_attestations (company_name, company_uid, market_role, holder_id)
 VALUES ('bob corp.', '654321', '{"mpId":"123456","roleAbbreviation":"VNB","roleName":"Verteilnetzbetreiber"}', 'did:web:identityhub-bob%3A10100:bob');
 
--- TODO: Mal schauen ob man die holder per REST hinzufügen kann, wenn ja das eventuell über ein zusätzlichen init-container machen
--- TODO: Oder hier einfach die holder datenbank vorher anlegen und befüllen, vermutlich der einfacherer Hack
+-- Create the holder table. Normally, the issuer creates this database on its own, but we will use it to initialize with default participants
+-- From holder-schema.sql - issuerservice-holder-store-sql - identity-hub
+CREATE TABLE IF NOT EXISTS holders
+(
+    holder_id                    VARCHAR PRIMARY KEY NOT NULL, -- ID of the Holder
+    participant_context_id       VARCHAR NOT NULL,             -- the DID with which this holder is identified
+    did                          VARCHAR NOT NULL,             -- the DID with which this holder is identified
+    holder_name                  VARCHAR,                      -- the display name of the holder
+    created_date       BIGINT    NOT NULL,                     -- POSIX timestamp of the creation of the PC
+    last_modified_date BIGINT                                  -- POSIX timestamp of the last modified date
+);
+CREATE UNIQUE INDEX IF NOT EXISTS holders_holder_id_uindex ON holders USING btree (holder_id);
+
+-- Insert alice and bob as valid dataspace participants
+INSERT INTO holders (holder_id, participant_context_id, did, holder_name, created_date)
+VALUES ('did:web:identityhub-alice%3A10100:alice', 'ZGlkOndlYjppZGVudGl0eWh1Yi1hbGljZSUzQTEwMTAwOmFsaWNl', 'did:web:identityhub-alice%3A10100:alice', 'alice', 1779969883);
+
+INSERT INTO holders (holder_id, participant_context_id, did, holder_name, created_date)
+VALUES ('did:web:identityhub-bob%3A10100:bob', 'ZGlkOndlYjppZGVudGl0eWh1Yi1ib2IlM0ExMDEwMDpib2I=', 'did:web:identityhub-bob%3A10100:bob', 'bob', 1779969883);
