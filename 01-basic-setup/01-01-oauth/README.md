@@ -144,7 +144,6 @@ You can interpret the following as a template to add further participants.
     image: ghcr.io/re4de/connector-controlplane-oauth2:1.1.3-edc0.14.0                  # Do not change
     ports:
       - "38181:8181"                                                                    # Increment first port for any further participant
-      - "38282:8282"                                                                    # Increment first port for any further participant
       - "37171:17171"                                                                   # Increment first port for any further participant
     networks:
       - default                                                                         # Do not change
