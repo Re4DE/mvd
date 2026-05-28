@@ -49,7 +49,7 @@ services:
       EDC_HOSTNAME: controlplane-alice
       EDC_IAM_ISSUER_ID: did:web:identityhub-alice%3A10100:alice
       EDC_IAM_DID_WEB_USE_HTTPS: false
-      EDC_IAM_STS_OAUTH_TOKEN_URL: http://identityhub-alice:9292/api/sts
+      EDC_IAM_STS_OAUTH_TOKEN_URL: http://identityhub-alice:9292/api/sts/token
       EDC_IAM_STS_OAUTH_CLIENT_ID: did:web:identityhub-alice%3A10100:alice
       EDC_IAM_STS_OAUTH_CLIENT_SECRET_ALIAS: alice-sts-client-secret
       EDC_IAM_CREDENTIAL_REVOCATION_MIMETYPE: application/json
@@ -69,6 +69,7 @@ services:
       EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 30000
       EDC_CATALOG_CACHE_EXECUTION_DELAY_SECONDS: 5
       EDC_CATALOG_CACHE_PARTITION_NUM_CRAWLERS: 5
+      EDC_REGISTRATION_KEYS_NAME_OVERWRITE: alice
       EDC_REGISTRATION_MARKETPARTNER_ISSUANCE_ENABLED: true
       EDC_REGISTRATION_REGISTRY_URL: http://connector-registry:3000/api/registry
       EDC_REGISTRATION_REGISTRY_API_KEY: devpass
@@ -100,8 +101,8 @@ services:
         restart: true
     environment:
       EDC_PARTICIPANT_ID: did:web:identityhub-alice%3A10100:alice
-      EDC_COMPONENT_ID: alice-controlplane
-      EDC_HOSTNAME: controlplane-alice
+      EDC_COMPONENT_ID: alice-identityhub
+      EDC_HOSTNAME: identityhub-alice
       EDC_IAM_DID_WEB_USE_HTTPS: false
       EDC_ISSUER_API_SUPERUSER_KEY: c3VwZXItdXNlcg==.devpass
       WEB_HTTP_PORT: 8180
@@ -145,6 +146,129 @@ services:
       EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:8185/api/public
       EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-alice
       EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-alice
+
+  # Participant one - Bob
+  controlplane-bob:
+    image: ghcr.io/re4de/connector-controlplane-dcp:1.1.3-edc0.14.0
+    ports:
+      - "28181:8181"
+      - "27171:17171"
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      identityhub-bob:
+        condition: service_healthy
+        restart: true
+      postgresql:
+        condition: service_healthy
+        restart: true
+      vault:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: did:web:identityhub-bob%3A10100:bob
+      EDC_COMPONENT_ID: bob-controlplane
+      EDC_HOSTNAME: controlplane-bob
+      EDC_IAM_ISSUER_ID: did:web:identityhub-bob%3A10100:bob
+      EDC_IAM_DID_WEB_USE_HTTPS: false
+      EDC_IAM_STS_OAUTH_TOKEN_URL: http://identityhub-bob:9292/api/sts/token
+      EDC_IAM_STS_OAUTH_CLIENT_ID: did:web:identityhub-bob%3A10100:bob
+      EDC_IAM_STS_OAUTH_CLIENT_SECRET_ALIAS: bob-sts-client-secret
+      EDC_IAM_CREDENTIAL_REVOCATION_MIMETYPE: application/json
+      EDC_IAM_TRUSTED-ISSUER_0_ID: did:web:issuer%3A10100:issuer
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      EDC_POLICY_MONITOR_STATE-MACHINE_ITERATION-WAIT-MILLIS: 30000
+      WEB_HTTP_PORT: 8180
+      WEB_HTTP_MANAGEMENT_AUTH_TYPE: tokenbased
+      WEB_HTTP_MANAGEMENT_AUTH_KEY: devpass
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_bob
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_bob
+      EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry
+      EDC_CATALOG_REGISTRY_API_KEY: devpass
+      EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 30000
+      EDC_CATALOG_CACHE_EXECUTION_DELAY_SECONDS: 5
+      EDC_CATALOG_CACHE_PARTITION_NUM_CRAWLERS: 5
+      EDC_REGISTRATION_KEYS_NAME_OVERWRITE: bob
+      EDC_REGISTRATION_MARKETPARTNER_ISSUANCE_ENABLED: true
+      EDC_REGISTRATION_REGISTRY_URL: http://connector-registry:3000/api/registry
+      EDC_REGISTRATION_REGISTRY_API_KEY: devpass
+      EDC_REGISTRATION_IH_IDENTITY_URL: http://identityhub-bob:15151/api/identity
+      EDC_REGISTRATION_IH_CREDENTIALS_URL: http://identityhub-bob:13131/api/credentials
+      EDC_REGISTRATION_ISSUER_DID: did:web:issuer%3A10100:issuer
+      EDC_POLICY_PM_URL: https://api-nprd.traxes.io/prprd/forwatt/v2
+      EDC_POLICY_PM_TOKEN_URL: https://acc.signin.energy/am/oauth2/realms/root/realms/difesp/access_token
+      EDC_POLICY_PM_TOKEN_CLIENT-ID: change-me
+      EDC_POLICY_PM_TOKEN_CLIENT-SECRET-ALIAS: pm-secret
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  identityhub-bob:
+    image: ghcr.io/re4de/identity-hub:1.0.0-edc0.14.0
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+      vault:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: did:web:identityhub-bob%3A10100:bob
+      EDC_COMPONENT_ID: bob-identityhub
+      EDC_HOSTNAME: identityhub-bob
+      EDC_IAM_DID_WEB_USE_HTTPS: false
+      EDC_ISSUER_API_SUPERUSER_KEY: c3VwZXItdXNlcg==.devpass
+      WEB_HTTP_PORT: 8180
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_bob
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_bob
+      EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  dataplane-bob:
+    image: ghcr.io/re4de/connector-dataplane:1.1.3-edc0.14.0
+    ports:
+      - "28185:8185"
+    networks:
+      - default
+      - dataspace-net
+    depends_on:
+      controlplane-alice:
+        condition: service_healthy
+        restart: true
+    environment:
+      EDC_PARTICIPANT_ID: did:web:identityhub-bob%3A10100:bob
+      EDC_COMPONENT_ID: bob-dataplane
+      EDC_HOSTNAME: dataplane-bob
+      EDC_VAULT_HASHICORP_URL: http://vault:8200
+      EDC_VAULT_HASHICORP_TOKEN: devpass
+      WEB_HTTP_PORT: 8180
+      EDC_SQL_SCHEMA_AUTOCREATE: true
+      EDC_DATASOURCE_DEFAULT_USER: edc_bob
+      EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
+      EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_bob
+      EDC_DPF_SELECTOR_URL: http://controlplane-bob:9191/api/control/v1/dataplanes
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:8185/api/public
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-bob
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-bob
 
   # Shared Database and Vault
   postgresql:
