@@ -112,7 +112,6 @@ services:
       EDC_DATASOURCE_DEFAULT_USER: edc_alice
       EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
       EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_alice
-      EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
       interval: 10s

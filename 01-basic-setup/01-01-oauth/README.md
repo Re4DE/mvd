@@ -50,7 +50,7 @@ You are now ready to go through our [Feature Showcase](../../02-features/README.
 The technical onboarding expects that all organizational contracts or requirements are completed, and that a new participant needs to be created on the technical side. 
 In this setup, with `Keycloak` as the central identity provider, the following steps for the onboarding are:
 - Create a new technical user within `Keycloak`.
-- Add a new pair of `Control Plane` and `Data Plane` to the `docker-compose-participants.yaml` file .
+- Add a new pair of `Control Plane` and `Data Plane` to the `docker-compose-participants.yaml` file.
 
 ```
 Be aware that the following description only applies to this MVD setup!
@@ -206,7 +206,7 @@ You can interpret the following as a template to add further participants.
       - default                                                                         # Do not change
       - dataspace-net                                                                   # Do not change
     depends_on:
-      controlplane-bob:
+      controlplane-my-con:
         condition: service_healthy                                                      # Do not change
         restart: true                                                                   # Do not change
     environment:
