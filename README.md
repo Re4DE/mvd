@@ -1,5 +1,6 @@
 # MVD
 
+![Static Badge](https://img.shields.io/badge/latest%20version-v1.0.0--edc0.14.0-blue?style=flat-square&logo=docker)
 [![license](https://img.shields.io/github/license/Re4DE/mvd?style=flat-square&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
@@ -24,8 +25,8 @@ You should use `OAuth2` and `X.509` only for demonstration or fast bootstrap.
 
 After you have chosen and deployed one of our three basic setups, you can explore the following [Feature Showcases](02-features/README.md) of `Re4DE`:
 - [Decentralized Catalog](02-features/02-01-catalog/README.md)
-- [Integration Permission Administrator](02-features/02-01-pa/README.md)
-- [Integration Smart-Meter PKI](02-features/02-01-sm-pki/README.md)
+- [Integration Permission Administrator](02-features/02-02-pa/README.md)
+- [Integration Smart-Meter PKI](02-features/02-03-sm-pki/README.md)
 
 ## 03. Production Ready Checklist
 
