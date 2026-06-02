@@ -93,6 +93,10 @@ VALUES ('spacer AG', '987654', '{"mpId":"456789","roleAbbreviation":"MSB","roleN
 In a real-world scenario, the values for `company_uid` and `market_role` in the third insert command are derived by a regulatory body of the German energy market that is authorized to assign them. 
 Therefore, it is up to you which fictional values you choose. 
 
+```
+If you have already started the ‘docker-compose-central.yaml’, you need to first shut down the stack and delete all volumes. Use the command to restart the central services, as this triggers the regeneration of the databases, tables, and the newly added participant.
+```
+
 #### Configure the connector through Docker Compose
 
 Before we configure the connector, we need to add configuration to the `PostgreSQL` and `HashiCorp Vault` deployments.
@@ -122,8 +126,8 @@ GRANT ALL ON SCHEMA public TO edc_spacer;
 We will now go to the `vault-init.sh` script in the folder `./config/vault/participants`. Add the following lines to the end of the file:
 
 ```bash
-put_if_missing secret/signer-key-spacer "@/opt/secrets/my_con/signer-key-spacer.pem"
-put_if_missing secret/verifier-key-spacer "@/opt/secrets/my_con/verifier-key-spacer.pem"
+put_if_missing secret/signer-key-spacer "@/opt/secrets/spacer/signer-key-spacer.pem"
+put_if_missing secret/verifier-key-spacer "@/opt/secrets/spacer/verifier-key-spacer.pem"
 ```
 
 As you may have noticed, some files need to be created.
@@ -141,7 +145,7 @@ Add the following configuration after the definition of participant `bob`.
 You can interpret the following as a template to add further participants.
 
 ```bash
-controlplane-spacer:
+  controlplane-spacer:
     image: ghcr.io/re4de/connector-controlplane-dcp:1.1.3-edc0.14.0                         # Do not change
     ports:
       - "38181:8181"                                                                        # Increment first port for any further participant
