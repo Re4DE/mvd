@@ -177,7 +177,7 @@ You can interpret the following as a template to add further participants.
       EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc_my_con          # Depends on the two env vars you used above this
       EDC_CATALOG_REGISTRY_URL: http://connector-registry:3000/api/registry             # Do not change
       EDC_CATALOG_REGISTRY_API_KEY: devpass                                             # Do not change
-      EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 30000                                 # Do not change
+      EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 300                                   # Do not change
       EDC_CATALOG_CACHE_EXECUTION_DELAY_SECONDS: 5                                      # Do not change
       EDC_CATALOG_CACHE_PARTITION_NUM_CRAWLERS: 5                                       # Do not change
       EDC_REGISTRATION_PARTICIPANT_CONTEXT_ENABLED: false                               # Do not change
