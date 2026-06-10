@@ -13,5 +13,5 @@ This showcase demonstrates how a `Permission Administrator` implementation can b
 
 ## [Integration Smart-Meter PKI](02-features/02-03-sm-pki/README.md)
 
-The `Smart-Meter PKI is` the trust anchor in the regulated part of the German energy market. 
+The `Smart-Meter PKI` is the trust anchor in the regulated part of the German energy market. 
 With this showcase, we demonstrate integration with the `Connector` via the `Data Plane`, enabling a brownfield solution to be integrated into dataspace concepts.
