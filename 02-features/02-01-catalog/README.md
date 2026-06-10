@@ -48,7 +48,7 @@ With the corresponding definition of `my-asset.json`.
     "dataAddress": {
         "@type": "DataAddress",
         "type": "HttpData",
-        "baseUrl": "https://api.thecatapi.com/v1/images/search",
+        "baseUrl": "https://api.thecatapi.com/v1/images/search"
     }
 }
 ```
