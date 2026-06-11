@@ -1,4 +1,8 @@
-# Integration Smart-Meter PKI with dataspace concepts
+# Integration Smart-Meter PKI with dataspace concepts (Experimental)
+
+```
+This feature is currently marked as ‘Experimental’. There is no guarantee that the feature will behave as expected, as there are many external dependencies that may change. Furthermore, this feature is under active development; this documentation may be out of sync with the actual implementation.
+```
 
 ![architecture](./doc/img/smpki-integration.jpg)
 
