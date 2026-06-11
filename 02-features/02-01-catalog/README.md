@@ -331,6 +331,11 @@ With the corresponding definition of `full-catalog-request.json`.
 - `@context`: Describes the vocabulary currently used for this query.
 - `@type`: The schema type of this object, in this case `QuerySpec`.
 
+
+```
+It takes 5 minutes for the Decentralized Catalog to update its entries. If your Asset does not appear in Bob's Decentralized Catalog, you need to wait a bit.
+```
+
 Since the `QuerySpec` imposes no further restrictions, this query returns all `Assets` for all participants. 
 A restriction of this list can be achieved as follows:
 
@@ -341,7 +346,7 @@ A restriction of this list can be achieved as follows:
   ],
   "@type": "QuerySpec",
   "offset": 0,
-  "limit": 20,
+  "limit": 20
 }
 ```
 
@@ -409,7 +414,7 @@ Check the negotiation status with:
 ```bash
 curl -X GET http://localhost:28181/api/management/v3/contractnegotiations/cef31597-67f8-4d1c-aa91-55cbcfe50756 \
     -H "Content-Type: application/json"                                                                        \
-    -H "x-api-key: devpass"                                                                                    \
+    -H "x-api-key: devpass"                                                                                    
 ```
 
 The response to this request includes the `state` field, which indicates whether the negotiation was successful. 
@@ -470,9 +475,9 @@ In this example, we assume the following value for `@id`: `d50c05cd-0ad8-482f-b5
 To view the status of the transfer process, we use the following request:
 
 ```bash
-$ curl -X GET https://localhost:28181/api/management/v3/transferprocesses/d50c05cd-0ad8-482f-b547-57273be3c545 \ 
-    -H "Content-Type: application/json"                                                                        \
-    -H "x-api-key: devpass"                                                                                    \
+$ curl -X GET http://localhost:28181/api/management/v3/transferprocesses/d50c05cd-0ad8-482f-b547-57273be3c545 \ 
+    -H "Content-Type: application/json"                                                                       \
+    -H "x-api-key: devpass"                                                                                    
 ```
 
 The response to this request includes the `state` field, which indicates whether the start of the transfer was successful. 
@@ -492,7 +497,7 @@ The following request provides us with the information we need to retrieve the d
 ```bash
 $ curl -X GET http://localhost:28181/api/management/v3/edrs/d50c05cd-0ad8-482f-b547-57273be3c545/dataaddress \ 
     -H "Content-Type: application/json"                                                                      \
-    -H "x-api-key: devpass"                                                                                  \
+    -H "x-api-key: devpass"                                                                                  
 ```
 
 We need the following fields from the response in order to retrieve data:
