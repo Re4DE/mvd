@@ -54,6 +54,11 @@ services:
       EDC_DATASOURCE_DEFAULT_USER: edc
       EDC_DATASOURCE_DEFAULT_PASSWORD: devpass
       EDC_DATASOURCE_DEFAULT_URL: jdbc:postgresql://postgresql:5432/edc
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   postgresql:
     image: postgres:18.2-alpine3.23
