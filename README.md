@@ -31,3 +31,9 @@ After you have chosen and deployed one of our three basic setups, you can explor
 ## 03. Production Ready Checklist
 
 Will follow, stay tuned!
+
+## 04. Troubleshooting
+
+### error during container init: exec: "xxx.sh": executable file not found ...
+
+Git might remove the execution bit of the shell scripts if you pull the repository on a Windows machine. To fix the issue, run `chmod +x ...` on all shell scripts.
