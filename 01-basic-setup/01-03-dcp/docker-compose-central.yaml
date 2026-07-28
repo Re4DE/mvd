@@ -27,7 +27,7 @@ networks:
 services:
   # Dataspace issuer + Database + Vault
   issuer:
-    image: ghcr.io/re4de/dataspace-issuer:1.1.0-edc0.14.0
+    image: ghcr.io/re4de/dataspace-issuer:1.1.1-edc0.14.0
     networks:
       - default
       - dataspace-net
@@ -103,7 +103,7 @@ services:
 
   # Connector Registry + Database
   connector-registry:
-    image: ghcr.io/re4de/connector-registry:1.0.1-edc0.14.0
+    image: ghcr.io/re4de/connector-registry:1.1.0-edc0.14.0
     networks:
       - default
       - dataspace-net

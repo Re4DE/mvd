@@ -141,7 +141,7 @@ You can interpret the following as a template to add further participants.
 
 ```bash
   controlplane-my-con:
-    image: ghcr.io/re4de/connector-controlplane-oauth2:1.1.3-edc0.14.0                  # Do not change
+    image: ghcr.io/re4de/connector-controlplane-oauth2:1.2.0-edc0.14.0                  # Do not change
     ports:
       - "38181:8181"                                                                    # Increment first port for any further participant
       - "37171:17171"                                                                   # Increment first port for any further participant
@@ -199,7 +199,7 @@ You can interpret the following as a template to add further participants.
       start_period: 30s                                                                 # Do not change
 
   dataplane-my-con:
-    image: ghcr.io/re4de/connector-dataplane:1.1.3-edc0.14.0                            # Do not change
+    image: ghcr.io/re4de/connector-dataplane:1.2.0-edc0.14.0                            # Do not change
     ports:
       - "38185:8185"                                                                    # Increment first port for any further participant
     networks:
@@ -224,6 +224,12 @@ You can interpret the following as a template to add further participants.
       EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:8185/api/public                # Do not change
       EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: signer-key-my-con               # Same name as defined in vault-init.sh
       EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: verifier-key-my-con            # Same name as defined in vault-init.sh
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]         # Do not change
+      interval: 10s                                                                     # Do not change
+      timeout: 10s                                                                      # Do not change
+      retries: 5                                                                        # Do not change
+      start_period: 30s                                                                 # Do not change
 ```
 
 Run the following command to apply the changes:
