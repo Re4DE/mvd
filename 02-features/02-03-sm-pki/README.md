@@ -1,8 +1,7 @@
 # Integration Smart-Meter PKI with dataspace concepts (Experimental)
 
-```
-This feature is currently marked as ‘Experimental’. There is no guarantee that the feature will behave as expected, as there are many external dependencies that may change. Furthermore, this feature is under active development; this documentation may be out of sync with the actual implementation.
-```
+> [!CAUTION]
+> This feature is currently marked as ‘Experimental’. There is no guarantee that the feature will behave as expected, as there are many external dependencies that may change. Furthermore, this feature is under active development; this documentation may be out of sync with the actual implementation.
 
 ![architecture](./doc/img/smpki-integration.jpg)
 
@@ -17,9 +16,8 @@ As shown in the picture above, if a backend or any other service requests the `D
 The `Data Plane` will then check and validate the received certificate with the `SM-PKI` **(2)**.
 If all checks pass, the data will then be transferred **(3)**. 
 
-```
-Currently, Re4DE only supports certificates from the 'Smart-Meter Beta-PKI'!
-```
+> [!NOTE]
+> Currently, Re4DE only supports certificates from the 'Smart-Meter Beta-PKI'!
 
 ## Asset configuration (Data Provider)
 

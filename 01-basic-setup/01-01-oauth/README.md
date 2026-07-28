@@ -52,9 +52,8 @@ In this setup, with `Keycloak` as the central identity provider, the following s
 - Create a new technical user within `Keycloak`.
 - Add a new pair of `Control Plane` and `Data Plane` to the `docker-compose-participants.yaml` file.
 
-```
-Be aware that the following description only applies to this MVD setup!
-```
+> [!IMPORTANT]
+> Be aware that the following description only applies to this MVD setup!
 
 #### Create a technical user within Keycloak
 

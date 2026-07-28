@@ -51,9 +51,8 @@ In this setup, with the `Dataspace Issuer` as the trust anchor, the following st
 - Add the participant as a valid member to the `Dataspace Issuer` and prepare the company information to issues `Verifiable Credentials`.
 - Add a new triple of `Control Plane`, `Data Plane` and `Identity Hub` to the `docker-compose-participants.yaml` file.
 
-```
-Be aware that the following description only applies to this MVD setup!
-```
+> [!IMPORTANT]
+> Be aware that the following description only applies to this MVD setup!
 
 ### Preparations
 
@@ -93,9 +92,8 @@ VALUES ('spacer AG', '987654', '{"mpId":"456789","roleAbbreviation":"MSB","roleN
 In a real-world scenario, the values for `company_uid` and `market_role` in the third insert command are derived by a regulatory body of the German energy market that is authorized to assign them. 
 Therefore, it is up to you which fictional values you choose. 
 
-```
-If you have already started the ‘docker-compose-central.yaml’, you need to first shut down the stack and delete all volumes. Use the command to restart the central services, as this triggers the regeneration of the databases, tables, and the newly added participant.
-```
+> [!WARNING]
+> If you have already started the ‘docker-compose-central.yaml’, you need to first shut down the stack and delete all volumes. Use the command to restart the central services, as this triggers the regeneration of the databases, tables, and the newly added participant.
 
 #### Configure the connector through Docker Compose
 

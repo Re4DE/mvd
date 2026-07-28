@@ -331,10 +331,8 @@ With the corresponding definition of `full-catalog-request.json`.
 - `@context`: Describes the vocabulary currently used for this query.
 - `@type`: The schema type of this object, in this case `QuerySpec`.
 
-
-```
-It takes 5 minutes for the Decentralized Catalog to update its entries. If your Asset does not appear in Bob's Decentralized Catalog, you need to wait a bit.
-```
+> [!IMPORTANT]
+> It takes 5 minutes for the Decentralized Catalog to update its entries. If your Asset does not appear in Bob's Decentralized Catalog, you need to wait a bit.
 
 Since the `QuerySpec` imposes no further restrictions, this query returns all `Assets` for all participants. 
 A restriction of this list can be achieved as follows:
@@ -421,11 +419,11 @@ The response to this request includes the `state` field, which indicates whether
 If the field value is `FINALIZED`, the contract was successfully negotiated. 
 We need the `contractAgreementId` value in the next step.
 
-```
-If the 'state' has the value 'REQUESTED', even after repeated use of the above request,
-this indicates that the value of the 'counterPartyAddress' field may contain a typo.
-If the 'state' is set to 'TERMINATED', there is another field called 'errorDetails'.
-```
+> [!TIP]
+> If the 'state' has the value 'REQUESTED', even after repeated use of the above request,
+> this indicates that the value of the 'counterPartyAddress' field may contain a typo.
+> If the 'state' is set to 'TERMINATED', there is another field called 'errorDetails'.
+
 
 ## Get the data of another participant
 
@@ -483,11 +481,10 @@ $ curl -X GET http://localhost:28181/api/management/v3/transferprocesses/d50c05c
 The response to this request includes the `state` field, which indicates whether the start of the transfer was successful. 
 If the field value is `FINALIZED`, the data transfer process was successfully started. 
 
-```
-If the 'state' has the value 'REQUESTED', even after repeated use of the above request,
-this indicates that the value of the 'counterPartyAddress' field may contain a typo.
-If the 'state' is set to 'TERMINATED', there is another field called 'errorDetails'.
-```
+> [!TIP]
+> If the 'state' has the value 'REQUESTED', even after repeated use of the above request,
+> this indicates that the value of the 'counterPartyAddress' field may contain a typo.
+> If the 'state' is set to 'TERMINATED', there is another field called 'errorDetails'.
 
 The next step is to obtain the information about the endpoint from which we can retrieve the data. 
 This is referred to as the `Endpoint Data Reference (EDR)`. We again need the `@id` of the started data transfer.
