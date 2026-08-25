@@ -26,7 +26,7 @@ networks:
 services:
   # Participant one - Alice
   controlplane-alice:
-    image: ghcr.io/re4de/connector-controlplane-dcp:1.2.0-edc0.14.0
+    image: ghcr.io/re4de/connector-controlplane-dcp:1.2.1-edc0.14.0
     ports:
       - "18181:8181"
       - "17171:17171"
@@ -120,7 +120,7 @@ services:
       start_period: 30s
 
   dataplane-alice:
-    image: ghcr.io/re4de/connector-dataplane:1.2.0-edc0.14.0
+    image: ghcr.io/re4de/connector-dataplane:1.2.1-edc0.14.0
     ports:
       - "18185:8185"
     networks:
@@ -154,7 +154,7 @@ services:
 
   # Participant one - Bob
   controlplane-bob:
-    image: ghcr.io/re4de/connector-controlplane-dcp:1.2.0-edc0.14.0
+    image: ghcr.io/re4de/connector-controlplane-dcp:1.2.1-edc0.14.0
     ports:
       - "28181:8181"
       - "27171:17171"
@@ -249,7 +249,7 @@ services:
       start_period: 30s
 
   dataplane-bob:
-    image: ghcr.io/re4de/connector-dataplane:1.2.0-edc0.14.0
+    image: ghcr.io/re4de/connector-dataplane:1.2.1-edc0.14.0
     ports:
       - "28185:8185"
     networks:

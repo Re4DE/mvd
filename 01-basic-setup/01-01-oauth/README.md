@@ -140,7 +140,7 @@ You can interpret the following as a template to add further participants.
 
 ```bash
   controlplane-my-con:
-    image: ghcr.io/re4de/connector-controlplane-oauth2:1.2.0-edc0.14.0                  # Do not change
+    image: ghcr.io/re4de/connector-controlplane-oauth2:1.2.1-edc0.14.0                  # Do not change
     ports:
       - "38181:8181"                                                                    # Increment first port for any further participant
       - "37171:17171"                                                                   # Increment first port for any further participant
@@ -198,7 +198,7 @@ You can interpret the following as a template to add further participants.
       start_period: 30s                                                                 # Do not change
 
   dataplane-my-con:
-    image: ghcr.io/re4de/connector-dataplane:1.2.0-edc0.14.0                            # Do not change
+    image: ghcr.io/re4de/connector-dataplane:1.2.1-edc0.14.0                            # Do not change
     ports:
       - "38185:8185"                                                                    # Increment first port for any further participant
     networks:
