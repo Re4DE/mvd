@@ -28,11 +28,7 @@ After you have chosen and deployed one of our three basic setups, you can explor
 - [Integration Permission Administrator](02-features/02-02-pa/README.md)
 - [Integration Smart-Meter PKI](02-features/02-03-sm-pki/README.md)
 
-## 03. Production Ready Checklist
-
-Will follow, stay tuned!
-
-## 04. Troubleshooting
+## 03. Troubleshooting
 
 ### error during container init: exec: "xxx.sh": executable file not found ...
 

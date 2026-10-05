@@ -67,7 +67,7 @@ To regenrate the key material, follow these steps.
 $ cd /config/certs
 
 # Generates Root-CA certificate and key
-$ openssl req -x509 -sha512 -days 36500 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP512r1 -keyout ca.key -nodes -out ca.crt -subj "/CN=SM-Root.CA/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=1" -extensions v3_req
+$ openssl req -x509 -sha512 -days 36500 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP512r1 -keyout ca.key -nodes -out ca.crt -subj "/CN=SM-Root.CA/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=1" -extensions v3_req -config ca.v3.ext
 ```
 
 #### Regenerate Sub-CA
@@ -77,17 +77,17 @@ $ openssl req -x509 -sha512 -days 36500 -newkey ec -pkeyopt ec_paramgen_curve:br
 $ openssl req -sha512 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP384r1 -keyout sub-ca.key -nodes -out sub-ca.csr -subj "/CN=Fraunhofer-SM-Sub.CA/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=2"
 
 # Create certificate for the Sub-CA from the Root-CA using the certificate signing request
-$ openssl x509 -req -CA ca.crt -CAkey ca.key -in sub-ca.csr -out sub-ca.crt -days 36500 -sha512 -CAcreateserial
+$ openssl x509 -req -CA ca.crt -CAkey ca.key -in sub-ca.csr -out sub-ca.crt -days 36500 -sha512 -CAcreateserial -extfile sub-ca.v3.ext
 ```
 
 #### Regenerate Keycloak server certificate and key
 
 ```bash
 # Generate certificate signing request and key for Keycloak
-$ openssl req -sha384 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP256r1 -keyout keycloak.key -nodes -out keycloak.csr -subj "/CN=Keycloak.EMT.API/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=3/L=Kassel/ST=Hessen"
+$ openssl req -sha384 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP256r1 -keyout keycloak.key -nodes -out keycloak.csr -subj "/CN=nginx/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=3/L=Kassel/ST=Hessen"
 
 # Create certificate for Keycloak from the Sub-CA using the certificate signing request
-$ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in keycloak.csr -out keycloak.crt -days 36500 -sha384 -CAcreateserial
+$ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in keycloak.csr -out keycloak.crt -days 36500 -sha384 -CAcreateserial -extfile keycloak.v3.ext
 ```
 
 #### Regenrate Alices client certificate and key
@@ -97,7 +97,7 @@ $ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in keycloak.csr -out keycl
 $ openssl req -sha384 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP256r1 -keyout alice.key -nodes -out alice.csr -subj "/CN=Alice.EMT.API/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=4/L=Kassel/ST=Hessen"
 
 # Create certificate for Alice from the Sub-CA using the certificate signing request
-$ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in alice.csr -out alice.crt -days 36500 -sha384 -CAcreateserial
+$ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in alice.csr -out alice.crt -days 36500 -sha384 -CAcreateserial -extfile alice.v3.ext
 ```
 
 #### Regenrate Bobs client certificate and key
@@ -107,5 +107,5 @@ $ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in alice.csr -out alice.cr
 $ openssl req -sha384 -newkey ec -pkeyopt ec_paramgen_curve:brainpoolP256r1 -keyout bob.key -nodes -out bob.csr -subj "/CN=Bob.EMT.API/O=SM-PKI-DE/OU=Fraunhofer IEE/C=DE/serialNumber=5/L=Kassel/ST=Hessen"
 
 # Create certificate for Bob from the Sub-CA using the certificate signing request
-$ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in bob.csr -out bob.crt -days 36500 -sha384 -CAcreateserial
+$ openssl x509 -req -CA sub-ca.crt -CAkey sub-ca.key -in bob.csr -out bob.crt -days 36500 -sha384 -CAcreateserial -extfile bob.v3.ext
 ```
