@@ -1,0 +1,6 @@
+authorityKeyIdentifier = keyid,issuer
+basicConstraints       = critical, CA:TRUE, pathlen:0
+nsCertType             = client, email
+subjectKeyIdentifier   = hash
+keyUsage               = critical, keyCertSign, digitalSignature, keyEncipherment
+extendedKeyUsage       = clientAuth, serverAuth

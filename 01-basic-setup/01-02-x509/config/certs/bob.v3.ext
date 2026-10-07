@@ -1,0 +1,6 @@
+authorityKeyIdentifier=keyid,issuer
+nsCertType = client, email
+subjectKeyIdentifier = hash
+basicConstraints=CA:FALSE
+keyUsage = critical, digitalSignature, nonRepudiation, keyEncipherment
+extendedKeyUsage = clientAuth, emailProtection
