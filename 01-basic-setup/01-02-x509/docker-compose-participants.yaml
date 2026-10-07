@@ -75,7 +75,6 @@ services:
       EDC_POLICY_PM_TOKEN_URL: https://acc.signin.energy/am/oauth2/realms/root/realms/difesp/access_token
       EDC_POLICY_PM_TOKEN_CLIENT-ID: change-me
       EDC_POLICY_PM_TOKEN_CLIENT-SECRET-ALIAS: pm-secret
-
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8180/api/check/health"]
       interval: 10s
