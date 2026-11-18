@@ -13,7 +13,8 @@ The following table collects all needed values grouped by each `basic setup`.
 |-------|-----------------------------------------|---------------------------------------------|-----------------------------------|
 | oauth | alice                                   | http://controlplane-alice:8282/api/protocol | http://localhost:18185/api/public |
 | oauth | bob                                     | http://controlplane-bob:8282/api/protocol   | http://localhost:28185/api/public |
-| x509  | ...                                     | ...                                         | ...                               |
+| x509  | alice                                   | http://controlplane-alice:8282/api/protocol | http://localhost:18185/api/public |
+| x509  | bob                                     | http://controlplane-bob:8282/api/protocol   | http://localhost:28185/api/public |
 | dsp   | did:web:identityhub-alice%3A10100:alice | http://controlplane-alice:8282/api/protocol | http://localhost:18185/api/public |
 | dsp   | did:web:identityhub-bob%3A10100:bob     | http://controlplane-bob:8282/api/protocol   | http://localhost:28185/api/public |
 
@@ -359,11 +360,14 @@ Check that these four fields exist, as they must be taken from the catalog for f
 - `dcat:dataset.@id`: The unique ID of the `Asset`.
 - `dcat:dataset.odrl:hasPolicy.@id`: A unique ID used for contract negotiations.
 
-For the following requests, we use the following example values for the fields described above:
+For the following requests, we use the following **example** values for the fields described above:
 - `dspace:participantId`: did:web:identityhub-alice%3A10100:alice
 - `originator`: http://controlplane-alice:8282/api/protocol
 - `dcat:dataset.@id`: my-asset
 - `dcat:dataset.odrl:hasPolicy.@id`: dGVzdA==:bXktYXNzZXQ=:ZTM5OTAyM2MtZTMxNy00ZDUzLWEzNjUtZTIzZWZjNTVkNTY5
+
+> [!IMPORTANT]
+> Remeber to use the values of your response for the following requests.
 
 Now, we start the negotiation process:
 

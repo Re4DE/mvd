@@ -142,7 +142,7 @@ services:
       EDC_X509_JWKS_URL: http://keycloak:8080/realms/demo-dataspace/protocol/openid-connect/certs
       EDC_VAULT_HASHICORP_URL: http://vault:8200
       EDC_VAULT_HASHICORP_TOKEN: devpass
-      EDC_POLICY_MONITOR_STATE-MACHINE_ITERATION-WAIT-MILLIS: 30000
+      EDC_POLICY_MONITOR_STATE-MACHINE_ITERATION-WAIT-MILLIS: 300
       WEB_HTTP_PORT: 8180
       WEB_HTTP_MANAGEMENT_AUTH_TYPE: tokenbased
       WEB_HTTP_MANAGEMENT_AUTH_KEY: devpass
